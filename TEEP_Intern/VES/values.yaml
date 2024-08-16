@@ -1,0 +1,452 @@
+fullnameOverride: o1ves
+
+grafana:
+  fullnameOverride: o1ves-grafana
+  enabled: true
+  defaultDashboardsTimezone: Asia/Taipei
+  adminPassword: smo
+  service:
+    type: NodePort
+    nodePort: 30000
+  persistence:
+    enabled: true
+    storageClassName: "local-storage-grafana"
+    size: 10Gi
+
+influxdb2:
+  fullnameOverride: o1ves-influxdb2
+  enabled: true
+  persistence:
+    enabled: true
+    storageClass: "local-storage-influxdb2"
+    accessMode: ReadWriteOnce
+    size: 50Gi
+    mountPath: /var/lib/influxdb2
+    subPath: ""
+  image:
+    repository: influxdb
+    tag: 2.3.0-alpine
+    pullPolicy: IfNotPresent
+  service:
+    type: NodePort
+    port: 80
+    targetPort: 8086
+    nodePort: 30001
+    annotations: {}
+    labels: {}
+    portName: http
+
+dmaap-influxdb-adapter:
+  enabled: true
+  image:
+    repository: harbor.winfra.cs.nycu.edu.tw/winlab-oran/dmaap-influxdb-adapter
+  influxdb:
+    host: o1ves-influxdb2
+    port: 80
+    tokenSecret: o1ves-influxdb2-auth
+    org: influxdata
+  logLevel: DEBUG
+
+  rules:
+    - topic: unauthenticated.VES_MEASUREMENT_OUTPUT
+      rules:
+        - bucket: o1_performance
+          measurement: ran1_gNB_DU_PM
+          matches:
+            - key: event.measurementFields.additionalFields.ran_id
+              value: ran1
+            - key: event.measurementFields.additionalFields.src_id
+              value: gNB_DU
+          tags:
+            - key: name
+              field: event.measurementFields.additionalMeasurements[0].name
+          fields:
+            - key: "RRU.PrbTotDl"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDl"
+              type: int
+            - key: "RRU.PrbAvailDl"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbAvailDl"
+              type: int
+            - key: "RRU.PrbTotUl"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUl"
+              type: int
+            - key: "RRU.PrbAvailUl"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbAvailUl"
+              type: int
+            - key: "RRU.PrbTotDlDist.BinBelow50Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDlDist.BinBelow50Percentage"
+              type: int
+            - key: "RRU.PrbTotDlDist.Bin50To60Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDlDist.Bin50To60Percentage"
+              type: int
+            - key: "RRU.PrbTotDlDist.Bin61To70Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDlDist.Bin61To70Percentage"
+              type: int
+            - key: "RRU.PrbTotDlDist.Bin71To80Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDlDist.Bin71To80Percentage"
+              type: int
+            - key: "RRU.PrbTotDlDist.Bin81To85Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDlDist.Bin81To85Percentage"
+              type: int
+            - key: "RRU.PrbTotDlDist.Bin86To90Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDlDist.Bin86To90Percentage"
+              type: int
+            - key: "RRU.PrbTotDlDist.Bin91To93Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDlDist.Bin91To93Percentage"
+              type: int
+            - key: "RRU.PrbTotDlDist.Bin94To96Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDlDist.Bin94To96Percentage"
+              type: int
+            - key: "RRU.PrbTotDlDist.Bin97To98Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDlDist.Bin97To98Percentage"
+              type: int
+            - key: "RRU.PrbTotDlDist.BinAbove98Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotDlDist.BinAbove98Percentage"
+              type: int
+            - key: "RRU.PrbTotUlDist.BinBelow50Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUlDist.BinBelow50Percentage"
+              type: int
+            - key: "RRU.PrbTotUlDist.Bin50To60Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUlDist.Bin50To60Percentage"
+              type: int
+            - key: "RRU.PrbTotUlDist.Bin61To70Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUlDist.Bin61To70Percentage"
+              type: int
+            - key: "RRU.PrbTotUlDist.Bin71To80Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUlDist.Bin71To80Percentage"
+              type: int
+            - key: "RRU.PrbTotUlDist.Bin81To85Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUlDist.Bin81To85Percentage"
+              type: int
+            - key: "RRU.PrbTotUlDist.Bin86To90Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUlDist.Bin86To90Percentage"
+              type: int
+            - key: "RRU.PrbTotUlDist.Bin91To93Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUlDist.Bin91To93Percentage"
+              type: int
+            - key: "RRU.PrbTotUlDist.Bin94To96Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUlDist.Bin94To96Percentage"
+              type: int
+            - key: "RRU.PrbTotUlDist.Bin97To98Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUlDist.Bin97To98Percentage"
+              type: int
+            - key: "RRU.PrbTotUlDist.BinAbove98Percentage"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRU.PrbTotUlDist.BinAbove98Percentage"
+              type: int
+            - key: "L1M.PHR1.BinLessThanMinus32dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.BinLessThanMinus32dBm"
+              type: int
+            - key: "L1M.PHR1.BinMinus32ToMinus26dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.BinMinus32ToMinus26dBm"
+              type: int
+            - key: "L1M.PHR1.BinMinus25ToMinus19dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.BinMinus25ToMinus19dBm"
+              type: int
+            - key: "L1M.PHR1.BinMinus18ToMinus12dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.BinMinus18ToMinus12dBm"
+              type: int
+            - key: "L1M.PHR1.BinMinus11ToMinus5dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.BinMinus11ToMinus5dBm"
+              type: int
+            - key: "L1M.PHR1.BinMinus4To2dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.BinMinus4To2dBm"
+              type: int
+            - key: "L1M.PHR1.Bin3To9dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.Bin3To9dBm"
+              type: int
+            - key: "L1M.PHR1.Bin10To16dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.Bin10To16dBm"
+              type: int
+            - key: "L1M.PHR1.Bin17To23dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.Bin17To23dBm"
+              type: int
+            - key: "L1M.PHR1.Bin24To31dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.Bin24To31dBm"
+              type: int
+            - key: "L1M.PHR1.Bin32To37dBm"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.Bin32To37dBm"
+              type: int
+            - key: "L1M.PHR1.BinGreaterThan38"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."L1M.PHR1.BinGreaterThan38"
+              type: int
+            - key: "RACH.PreambleDedCell"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RACH.PreambleDedCell"
+              type: int
+            - key: "RACH.PreambleACell"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RACH.PreambleACell"
+              type: int
+            - key: "RACH.PreambleBCell"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RACH.PreambleBCell"
+              type: int
+            - key: "RACH.PreambleDed.0"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RACH.PreambleDed.0"
+              type: int
+            - key: "RACH.PreambleA.0"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RACH.PreambleA.0"
+              type: int
+            - key: "RACH.PreambleB.0"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RACH.PreambleB.0"
+              type: int
+
+        - bucket: o1_performance
+          measurement: ran1_gNB_CU_PM
+          matches:
+            - key: event.measurementFields.additionalFields.ran_id
+              value: ran1
+            - key: event.measurementFields.additionalFields.src_id
+              value: gNB_CU
+          tags:
+            - key: name
+              field: event.measurementFields.additionalMeasurements[0].name
+          fields:
+            - key: "PAG.ReceivedNbrCnInitiated"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."PAG.ReceivedNbrCnInitiated"
+              type: int
+            - key: "PAG.DiscardedNbrCnInitiated"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."PAG.DiscardedNbrCnInitiated"
+              type: int
+            - key: "MM.HoPrepInterReq"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoPrepInterReq"
+              type: int
+            - key: "MM.HoResAlloInterReq"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoResAlloInterReq"
+              type: int
+            - key: "MM.HoExeInterReq"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoExeInterReq"
+              type: int
+            - key: "MM.HoPrepInterSucc"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoPrepInterSucc"
+              type: int
+            - key: "MM.HoResAlloInterSucc"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoResAlloInterSucc"
+              type: int
+            - key: "MM.HoExeInterSucc"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoExeInterSucc"
+              type: int
+            - key: "MM.HoPrepInterFail"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoPrepInterFail"
+              type: int
+            - key: "MM.HoResAlloInterFail"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoResAlloInterFail"
+              type: int
+            - key: "MM.MM.HoExeInterFail.UeCtxtRelCmd.cause"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.MM.HoExeInterFail.UeCtxtRelCmd.cause"
+              type: int
+            - key: "MM.HoPrepIntraReq"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoPrepIntraReq"
+              type: int
+            - key: "MM.HoExeIntraReq"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoExeIntraReq"
+              type: int
+            - key: "MM.HoPrepIntraSucc"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoPrepIntraSucc"
+              type: int
+            - key: "MM.HoExeIntraSucc"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."MM.HoExeIntraSucc"
+              type: int
+            - key: "RRC.ConnMean"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRC.ConnMean"
+              type: int
+            - key: "RRC.ConnMax"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRC.ConnMax"
+              type: int
+            - key: "RRC.ConnEstabAtt"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRC.ConnEstabAtt"
+              type: int
+            - key: "RRC.ConnEstabSucc"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRC.ConnEstabSucc"
+              type: int
+            - key: "RRC.ReEstabAtt"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRC.ReEstabAtt"
+              type: int
+            - key: "PAG.SuccessRatio"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."PAG.SuccessRatio"
+              type: int
+            - key: "RRC.ReEstabSuccWithoutUeContext"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."RRC.ReEstabSuccWithoutUeContext"
+              type: int
+            - key: "QosFlow.PdcpPduVolumeDl"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."QosFlow.PdcpPduVolumeDl"
+              type: int
+            - key: "QosFlow.PdcpPduVolumeUl"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."QosFlow.PdcpPduVolumeUl"
+              type: int
+            - key: "Sys.DataVolumeDL"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."Sys.DataVolumeDL"
+              type: int
+            - key: "Sys.DataVolumeUL"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."Sys.DataVolumeUL"
+              type: int
+            - key: "Sys.SpecEffDL"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."Sys.SpecEffDL"
+              type: float
+            - key: "Sys.SpecEffUL"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."Sys.SpecEffUL"
+              type: float
+            - key: "Sys.CellAvail"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."Sys.CellAvail"
+              type: int
+
+        - bucket: o1_performance
+          measurement: BBU_instantaneous_power
+          matches:
+            - key: event.measurementFields.additionalFields.ran_id
+              value: ran1
+            - key: event.measurementFields.additionalFields.src_id
+              value: BBU
+          tags:
+            - key: name
+              value: event.measurementFields.additionalMeasurements[0].name
+          fields:
+            - key: "instantaneous_power"
+              field: event.measurementFields.additionalMeasurements[0].hashMap."instantaneous_power"
+              type: float
+
+    - topic: unauthenticated.SEC_FAULT_OUTPUT
+      rules:
+        - bucket: o1_fault_event
+          measurement: BBU_FM_Event
+          matches:
+            - key: event.commonEventHeader.domain
+              value: fault
+          tags:
+            - key: eventType
+              field: event.commonEventHeader.eventType
+          fields:
+            - key: eventName
+              field: event.commonEventHeader.eventName
+              type: string
+            - key: sourceName
+              field: event.commonEventHeader.sourceName
+              type: string
+            - key: nfVendorName
+              field: event.commonEventHeader.nfVendorName
+              type: string
+            - key: eventSeverity
+              field: event.faultFields.eventSeverity
+              type: string
+            - key: specificProblem
+              field: event.faultFields.specificProblem
+              type: string
+
+    - topic: unauthenticated.SEC_OTHER_OUTPUT
+      rules:
+        - bucket: PDCP_Throughput
+          measurement: ue_sum_info
+          matches:
+            - key: event.commonEventHeader.domain
+              value: other
+            - key: event.otherFields.arrayOfNamedHashMap[0].name
+              value: total
+          tags:
+            - key: name
+              field: event.otherFields.arrayOfNamedHashMap[0].name
+          fields:
+            - key: num_of_ue
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.num_of_ue
+              type: int
+            - key: total_ul_tp
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.total_ul_tp
+              type: float
+            - key: total_ul_pkt
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.total_ul_pkt
+              type: int
+            - key: total_dl_tp
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.total_dl_tp
+              type: float
+            - key: total_dl_pkt
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.total_dl_pkt
+              type: int
+        - bucket: PDCP_Throughput
+          measurement: ue_info
+          matches:
+            - key: event.commonEventHeader.domain
+              value: other
+            - key: event.otherFields.arrayOfNamedHashMap[0].name
+              value: personal
+          tags:
+            - key: name
+              field: event.otherFields.arrayOfNamedHashMap[0].name
+          fields:
+            - key: ue_id
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.ue_id
+              type: int
+            - key: ul_tp
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.ul_tp
+              type: float
+            - key: ul_pkt
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.ul_pkt
+              type: int
+            - key: dl_tp
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.dl_tp
+              type: float
+            - key: dl_pkt
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.dl_pkt
+              type: int
+        - bucket: BBU_Info
+          measurement: BBU_Info
+          matches:
+            - key: event.commonEventHeader.domain
+              value: other
+            - key: event.otherFields.arrayOfNamedHashMap[0].name
+              value: ran1
+          tags:
+            - key: name
+              field: event.otherFields.arrayOfNamedHashMap[0].name
+          fields:
+            - key: PLMNID
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.PLMNID
+              type: string
+            - key: BBU_IP
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.BBU_IP
+              type: string
+            - key: BBU_NETMASK
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.BBU_NETMASK
+              type: string
+            - key: BBU_Gateway_IP
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.BBU_Gateway_IP
+              type: string
+            - key: AMF_IP
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.AMF_IP
+              type: string
+            - key: gNB_ID
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.gNB_ID
+              type: string
+        - bucket: BBU_Info
+          measurement: BBU_Info
+          matches:
+            - key: event.commonEventHeader.domain
+              value: other
+            - key: event.otherFields.arrayOfNamedHashMap[0].name
+              value: ran2
+          tags:
+            - key: name
+              field: event.otherFields.arrayOfNamedHashMap[0].name
+          fields:
+            - key: PLMNID
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.PLMNID
+              type: string
+            - key: BBU_IP
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.BBU_IP
+              type: string
+            - key: BBU_NETMASK
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.BBU_NETMASK
+              type: string
+            - key: BBU_Gateway_IP
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.BBU_Gateway_IP
+              type: string
+            - key: AMF_IP
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.AMF_IP
+              type: string
+            - key: gNB_ID
+              field: event.otherFields.arrayOfNamedHashMap[0].hashMap.gNB_ID
+              type: string
+
+buckets:
+  - name: o1_performance
+  - name: o1_fault_event
+  - name: PDCP_Throughput
+  - name: BBU_Info
+
+image:
+  pullPolicy: IfNotPresent
