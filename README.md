@@ -1,3 +1,62 @@
+# 📡 Open RAN Integration with SMO Framework and Near-RT RIC at NTUST
+
+## 📌 Project Overview
+This project is a research internship conducted at **National Taiwan University of Science and Technology (NTUST)** as part of the **Taiwan Experience Education Program (TEEP) 2024**. The main objective is to design and integrate an **Open Radio Access Network (Open RAN)** system with **Service Management and Orchestration (SMO) Framework (Non-Real-Time)** and **Near Real-Time RAN Intelligent Controller (RIC)**. The project follows the **O-RAN Alliance standards** and leverages various **open-source** tools for implementation.
+
+## 🎯 Objectives
+1. **Design and integrate** an Open RAN architecture with SMO Framework and Near-RT RIC.
+2. **Configure and test** interoperability between Open RAN components.
+3. **Optimize network automation** and performance tuning via AI/ML models.
+4. **Evaluate system performance** and compatibility with O-RAN standards.
+5. **Document findings and provide recommendations** for future Open RAN development.
+
+## 🏗️ Methodology
+The project follows a structured approach that includes:
+- **Literature Review**: Studying Open RAN, SMO, and RIC implementations.
+- **System Architecture Design**: Defining integration strategies for Open RAN, SMO, and RIC.
+- **Implementation & Testing**: Deploying Open RAN components and conducting tests.
+- **Performance Analysis**: Evaluating system efficiency and optimization results.
+- **Documentation**: Recording findings for future improvements.
+
+## 🏛️ System Architecture
+The research internship involved setting up a **virtualized Open RAN system** that integrates:
+- **5G Core Network (5GC)** using **Open5GS**
+- **Radio Access Network (RAN)** using **srsRAN & OpenAirInterface (OAI)**
+- **Service Management and Orchestration (SMO)** for network automation
+- **Near-RT RIC** for real-time optimization of RAN elements
+- **Non-RT RIC** for policy management and AI-driven network orchestration
+
+### **System Components**
+- **📡 Open RAN**
+  - O-RAN Alliance-compliant **CU (Central Unit), DU (Distributed Unit), and RU (Radio Unit)**
+- **🖧 5G Core**
+  - Open5GS (AMF, SMF, UPF) for managing the **5G control and data plane**
+- **🖥️ Network Orchestration**
+  - **SMO (Service Management and Orchestration)**
+  - **Near-RT RIC (Real-Time Optimization)**
+  - **Non-RT RIC (Policy-based AI/ML Optimization)**
+- **🧠 AI/ML Integration**
+  - AI-based traffic prediction and network slicing using **ClearML & OSC AIMLFW**
+
+## 🚀 Technologies Used
+- **Open RAN Software**: O-RAN Software Community (OSC), OpenAirInterface (OAI), srsRAN
+- **5G Core Network**: Open5GS, free5GC
+- **Orchestration & Automation**: OSC SMO, ONAP
+- **AI/ML Frameworks**: OSC AIMLFW, ClearML
+- **Containerization & Virtualization**: Docker, Kubernetes, Linux Virtual Machines
+
+## 📊 Key Findings
+- **Successful integration** of Open RAN with SMO and Near-RT RIC following O-RAN Alliance specifications.
+- **Improved network automation** through AI/ML-driven orchestration.
+- **Optimized RAN performance** via real-time and non-real-time control loops.
+- **Enhanced flexibility and cost-efficiency** in Open RAN deployment scenarios.
+
+## 📜 References
+- **Internship Report**: "Perancangan dan Integrasi Sistem Open RAN dengan SMO Framework dan Near-RT RIC di NTUST" (2024).
+- **O-RAN Alliance Technical Documents**: [https://www.o-ran.org/](https://www.o-ran.org/)
+- **National Taiwan University of Science and Technology (NTUST)**
+- **Open5GS, OpenAirInterface, srsRAN, ONAP, ClearML**
+
 # <center>🇮🇩 2024-UI-Devin-[Energy Saving in ORAN System] | Naufan Raharya, S.T., M.T., Ph.D.</center>
 
 ## Personal Information
